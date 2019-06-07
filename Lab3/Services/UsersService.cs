@@ -60,7 +60,8 @@ namespace Lab3.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Username.ToString()),
-                    new Claim(ClaimTypes.Role, user.UserRole.ToString())        //rolul vine ca string
+                    new Claim(ClaimTypes.Role, user.UserRole.ToString()),        //rolul vine ca string
+                    new Claim(ClaimTypes.UserData, user.DataRegistered.ToString())        //DataRegistered vine ca string
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -115,7 +116,9 @@ namespace Lab3.Services
                 FirstName = registerinfo.FirstName,
                 Password = ComputeSha256Hash(registerinfo.Password),
                 Username = registerinfo.UserName,
-                UserRole = UserRole.Regular
+                UserRole = UserRole.Regular,
+                DataRegistered = DateTime.Now
+
             });
             context.SaveChanges();
             return Authenticate(registerinfo.UserName, registerinfo.Password);
@@ -144,6 +147,7 @@ namespace Lab3.Services
         public UserGetModel GetById(int id)
         {
             User user = context.Users
+                .AsNoTracking()
                 .FirstOrDefault(u => u.Id == id);
 
             return UserGetModel.FromUser(user);
@@ -180,7 +184,8 @@ namespace Lab3.Services
 
         public UserGetModel Delete(int id)
         {
-            var existing = context.Users.FirstOrDefault(u => u.Id == id);
+            var existing = context.Users
+                .FirstOrDefault(u => u.Id == id);
             if (existing == null)
             {
                 return null;

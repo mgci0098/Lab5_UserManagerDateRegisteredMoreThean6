@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CentruMultimedia.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,5 +25,12 @@ namespace Lab3.Models
 
         [EnumDataType(typeof(UserRole))]
         public UserRole UserRole { get; set; }
+
+        public DateTime DataRegistered { get; set; }
+
+        public List<Comentariu> Comentarii { get; set; }
+
+        public List<Film> Filme { get; set; }
+
     }
 }

@@ -15,5 +15,8 @@ namespace Lab3.ViewModels
         public string Email { get; set; }
         [StringLength(50, MinimumLength = 6)]
         public string Password { get; set; }
+
+        public DateTime DataRegistered { get; set; }
+
     }
 }
